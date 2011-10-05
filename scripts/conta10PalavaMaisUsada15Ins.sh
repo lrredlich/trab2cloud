@@ -1,0 +1,11 @@
+./elastic-mapreduce --create --name "conta 10 palavras mais usada com 15 instancias" \
+--stream --mapper  'ruby s3n://trab2cloud/map/map_conta_palavras_diferentes.rb' \
+     --input   s3n://trab2cloud/input/* \
+     --output  s3n://trab2cloud/out/10palavras+usadas/temp \
+     --reducer 'ruby s3n://trab2cloud/reduce/reduce_conta_palavra+_usada.rb' \
+     --num-instances 15 \
+--stream --mapper  /bin/cat \
+     --input   s3n://trab2cloud/out/10palavras+usadas/temp/* \
+     --output  s3n://trab2cloud/out/10palavras+usadas/15instancias \
+     --reducer 'ruby s3n://trab2cloud/reduce/reduce_conta_10palavras+_usadas.rb' \
+     --args -D,mapred.reduce.tasks=1 \
